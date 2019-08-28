@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {
+  DataTable,
   StructuredListWrapper,
   StructuredListRow,
   StructuredListCell,
@@ -13,7 +14,7 @@ import Header from "./Header";
 import DisplayForm from "./DisplayForm";
 import "./patterns.scss";
 
-class MasterDetail extends Component {
+class StockItems extends Component {
   constructor(props) {
     super(props);
     const data = [
@@ -52,75 +53,50 @@ class MasterDetail extends Component {
     this.setState({ selectedRow: id });
   };
 
-  renderRow = (row, id) => {
-    return (
-      <StructuredListRow key={id} onClick={() => this.onRowClick(id)}>
-        <div>
-          <StructuredListInput
-            id={`row-${id}`}
-            value="row-0"
-            title="row-0"
-            name="row-0"
-            checked={this.state.selectedRow === id}
-          />
-          <StructuredListCell>
-            <Icon
-              className="bx--structured-list-svg"
-              icon={iconCheckmarkSolid}
-            />
-          </StructuredListCell>
-        </div>
-        {Object.keys(row).map(col => {
-          return (
-            <StructuredListCell key={col} className="simple-list-row">
-              {row[col]}
-            </StructuredListCell>
-          );
-        })}
-      </StructuredListRow>
-    );
-  };
-
   render() {
     const selectedRow = this.state.selectedRow;
     const data = this.state.data;
     const columns = data[selectedRow].map(item => item.label);
 
     return (
+
+
       <div className="bx--grid ">
         <Header
-          title="Master Detail"
-          subtitle="This pattern will use a simple list of table list and link to a display form."
+          title="Stock Items"
         />
         <div className="bx--row">
           <div className="bx--col-xs-12">
-            <StructuredListWrapper selection border>
-              <StructuredListHead>
-                <StructuredListRow head>
-                  <StructuredListCell head />
-                  {columns.map(key => {
-                    return (
-                      <StructuredListCell head key={key}>
-                        {key.charAt(0).toUpperCase() +
-                          key.slice(1).replace(/([A-Z])/g, " $1")}
-                      </StructuredListCell>
-                    );
-                  })}
-                </StructuredListRow>
-              </StructuredListHead>
-              <StructuredListBody>
-                {data.map((row, i) => {
-                  const values = row.map(item => item.value);
-                  return this.renderRow(values, i);
-                })}
-              </StructuredListBody>
-            </StructuredListWrapper>
+
+            <DataTable
+                rows={[{
+                  id: 'a',
+                  name: 'Load Balancer 3',
+                  protocol: 'HTTP',
+                },{
+                  id: 'b',
+                  name: 'Load Balancer 1',
+                  protocol: 'HTTP',
+                },{
+                  id: 'c',
+                  name: 'Load Balancer 2',
+                  protocol: 'HTTP',
+                }]}
+                headers={[
+                  {key: 'name',header: 'Name'},
+                  {key: 'protocol',header: 'Protocol'},
+                  {key: 'port',header: 'Port'},
+                ]}
+                useZebraStyles={true}
+            />
+
           </div>
         </div>
         <DisplayForm data={data[selectedRow]} />
+
       </div>
     );
   }
 }
 
-export default MasterDetail;
+export default StockItems;

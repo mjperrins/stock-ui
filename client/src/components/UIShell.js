@@ -26,7 +26,7 @@ class UIShell extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      patternName: "Display Form"
+      patternName: "Overview"
     };
   }
 
@@ -46,7 +46,7 @@ class UIShell extends Component {
         <Header aria-label="IBM Platform Name">
           <SkipToContent />
           <HeaderName href="#" prefix="IBM">
-            Garage for Cloud Catalyst
+            Garage - Stock Apps
           </HeaderName>
         </Header>
         <SideNav aria-label="Side navigation">
@@ -54,21 +54,13 @@ class UIShell extends Component {
             <SideNavMenu
               defaultExpanded
               icon={<Fade20 />}
-              title="12 Design Patterns"
+              title="Stock Manager"
             >
-              {this.renderSideNavItem("Display Form")}
-              {this.renderSideNavItem("Validating Form")}
-              {this.renderSideNavItem("Update Form")}
-              {this.renderSideNavItem("Validating Form Wizard 1")}
-              {this.renderSideNavItem("Validating Form Wizard 2")}
-              {this.renderSideNavItem("Simple List")}
-              {this.renderSideNavItem("Table List")}
-              {this.renderSideNavItem("List to List")}
-              {this.renderSideNavItem("Linked List")}
-              {this.renderSideNavItem("Master Detail")}
-              {this.renderSideNavItem("Create, Read, Update, Delete")}
-              {this.renderSideNavItem("Search List")}
-              {this.renderSideNavItem("Search Form")}
+              {this.renderSideNavItem("Overview")}
+              {this.renderSideNavItem("Stock Items")}
+              {this.renderSideNavItem("Add Item")}
+              {this.renderSideNavItem("Create Order")}
+
             </SideNavMenu>
           </SideNavItems>
         </SideNav>

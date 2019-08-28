@@ -11,31 +11,51 @@ import "./patterns.scss";
 
 let checkFlag = true;
 
-class UpdateForm extends Component {
+class CreateOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dataToSave: {},
-      name: "John Doe",
-      address: "123 Main Street",
-      city: "Anytown",
-      state: "TX",
-      zipCode: "12345",
-      country: "United States"
+      showDescription: props.showDescription || false
     };
+    if (this.props.data) {
+      let dataToLoad = this.convertData(this.props.data);
+      this.state = {
+        ...this.state,
+        name: dataToLoad.Name,
+        address: dataToLoad.Address,
+        city: dataToLoad.City,
+        state: dataToLoad.State[0],
+        zipCode: dataToLoad.ZipCode,
+        country: dataToLoad.Country[0]
+      };
+    }
   }
 
-  componentDidMount() {
-    let dataToSave = {
-      name: this.state.name,
-      address: this.state.address,
-      city: this.state.city,
-      state: this.state.state,
-      zipCode: this.state.zipCode,
-      country: this.state.country
-    };
-    this.setState({ dataToSave });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data) {
+      let dataToLoad = this.convertData(nextProps.data);
+      if (dataToLoad.Name === "Enter data below") {
+        dataToLoad.Name = "";
+      }
+      this.setState({
+        name: dataToLoad.Name,
+        address: dataToLoad.Address,
+        city: dataToLoad.City,
+        state: dataToLoad.State[0],
+        zipCode: dataToLoad.ZipCode,
+        country: dataToLoad.Country[0]
+      });
+    }
   }
+
+  convertData = inputData => {
+    let output = {};
+    inputData.forEach(dataRow => {
+      output[dataRow.label] = dataRow.value;
+    });
+    return output;
+  };
 
   saveData = event => {
     const target = event.target;
@@ -103,19 +123,27 @@ class UpdateForm extends Component {
         zipCode: this.state.zipCode,
         country: this.state.country
       };
-      this.setState({ dataToSave });
+      if (typeof this.props.updateRow === "function") {
+        this.props.updateRow(dataToSave);
+      } else {
+        this.setState({ dataToSave });
+      }
+      if (this.props.adding) {
+        this.props.toggleAdding();
+      }
     }
   };
 
   render() {
+    const showDescription = this.state.showDescription;
     return (
       <div className="bx--grid pattern-container">
-        <Header
-          title="Update Form"
-          subtitle="Update form is based on the Display
-            Form pattern but will display model data and then validate ready for
-            it to be updated."
-        />
+        {showDescription && (
+          <Header
+            title="Create Order"
+            subtitle="Presents a model object as a data input form and interacts with a validation service for validation."
+          />
+        )}
         <div className="bx--row">
           <div className="bx--col-xs-12">
             <Tile>
@@ -258,7 +286,14 @@ class UpdateForm extends Component {
                 <br />
                 <br />
                 <div className="left-align">
-                  <Button onClick={this.saveForm}>Update</Button>
+                  {showDescription && (
+                    <Button onClick={this.saveForm}>Submit</Button>
+                  )}
+                  {!showDescription && (
+                    <Button onClick={this.saveForm}>
+                      {this.props.adding ? "Add" : "Update"}
+                    </Button>
+                  )}
                 </div>
               </Form>
             </Tile>
@@ -271,7 +306,7 @@ class UpdateForm extends Component {
             <div className="bx--col-xs-12 left-align">
               <Tile>
                 {Object.keys(this.state.dataToSave).map(item => (
-                  <p key={item}>
+                  <p>
                     &nbsp;&nbsp;
                     <strong>
                       {item.charAt(0).toUpperCase() +
@@ -291,4 +326,4 @@ class UpdateForm extends Component {
     );
   }
 }
-export default UpdateForm;
+export default CreateOrder;

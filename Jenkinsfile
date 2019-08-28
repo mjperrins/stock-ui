@@ -58,7 +58,7 @@ spec:
             optional: true
       env:
         - name: CHART_NAME
-          value: template-node-react
+          value: stock-ui
         - name: CHART_ROOT
           value: chart
         - name: TMP_DIR
@@ -95,12 +95,6 @@ spec:
                 sh '''#!/bin/bash
                     set -x
                     npm test
-                '''
-            }
-            stage('Sonar scan') {
-                sh '''#!/bin/bash
-                    set -x
-                    npm run sonarqube:scan
                 '''
             }
         }

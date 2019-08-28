@@ -11,51 +11,31 @@ import "./patterns.scss";
 
 let checkFlag = true;
 
-class ValidatingForm extends Component {
+class AddItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dataToSave: {},
-      showDescription: props.showDescription || false
+      name: "John Doe",
+      address: "123 Main Street",
+      city: "Anytown",
+      state: "TX",
+      zipCode: "12345",
+      country: "United States"
     };
-    if (this.props.data) {
-      let dataToLoad = this.convertData(this.props.data);
-      this.state = {
-        ...this.state,
-        name: dataToLoad.Name,
-        address: dataToLoad.Address,
-        city: dataToLoad.City,
-        state: dataToLoad.State[0],
-        zipCode: dataToLoad.ZipCode,
-        country: dataToLoad.Country[0]
-      };
-    }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.data) {
-      let dataToLoad = this.convertData(nextProps.data);
-      if (dataToLoad.Name === "Enter data below") {
-        dataToLoad.Name = "";
-      }
-      this.setState({
-        name: dataToLoad.Name,
-        address: dataToLoad.Address,
-        city: dataToLoad.City,
-        state: dataToLoad.State[0],
-        zipCode: dataToLoad.ZipCode,
-        country: dataToLoad.Country[0]
-      });
-    }
+  componentDidMount() {
+    let dataToSave = {
+      name: this.state.name,
+      address: this.state.address,
+      city: this.state.city,
+      state: this.state.state,
+      zipCode: this.state.zipCode,
+      country: this.state.country
+    };
+    this.setState({ dataToSave });
   }
-
-  convertData = inputData => {
-    let output = {};
-    inputData.forEach(dataRow => {
-      output[dataRow.label] = dataRow.value;
-    });
-    return output;
-  };
 
   saveData = event => {
     const target = event.target;
@@ -123,27 +103,16 @@ class ValidatingForm extends Component {
         zipCode: this.state.zipCode,
         country: this.state.country
       };
-      if (typeof this.props.updateRow === "function") {
-        this.props.updateRow(dataToSave);
-      } else {
-        this.setState({ dataToSave });
-      }
-      if (this.props.adding) {
-        this.props.toggleAdding();
-      }
+      this.setState({ dataToSave });
     }
   };
 
   render() {
-    const showDescription = this.state.showDescription;
     return (
       <div className="bx--grid pattern-container">
-        {showDescription && (
-          <Header
-            title="Validating Form"
-            subtitle="Presents a model object as a data input form and interacts with a validation service for validation."
-          />
-        )}
+        <Header
+          title="Add Stock Item"
+        />
         <div className="bx--row">
           <div className="bx--col-xs-12">
             <Tile>
@@ -286,14 +255,7 @@ class ValidatingForm extends Component {
                 <br />
                 <br />
                 <div className="left-align">
-                  {showDescription && (
-                    <Button onClick={this.saveForm}>Submit</Button>
-                  )}
-                  {!showDescription && (
-                    <Button onClick={this.saveForm}>
-                      {this.props.adding ? "Add" : "Update"}
-                    </Button>
-                  )}
+                  <Button onClick={this.saveForm}>Update</Button>
                 </div>
               </Form>
             </Tile>
@@ -306,7 +268,7 @@ class ValidatingForm extends Component {
             <div className="bx--col-xs-12 left-align">
               <Tile>
                 {Object.keys(this.state.dataToSave).map(item => (
-                  <p>
+                  <p key={item}>
                     &nbsp;&nbsp;
                     <strong>
                       {item.charAt(0).toUpperCase() +
@@ -326,4 +288,4 @@ class ValidatingForm extends Component {
     );
   }
 }
-export default ValidatingForm;
+export default AddItem;
