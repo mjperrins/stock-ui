@@ -4,6 +4,8 @@
 
 replicaCount: 1
 
+apiHost: stock-bff:80
+
 image:
   repository: replace
   tag: replace
